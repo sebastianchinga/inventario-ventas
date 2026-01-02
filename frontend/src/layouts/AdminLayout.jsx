@@ -100,7 +100,7 @@ const AdminLayout = () => {
                         </div>
                     </header>
                     {/* Content Area */}
-                    <div className="flex-1 overflow-auto bg-gray-900 p-8">
+                    <div className={`flex-1 overflow-auto bg-gray-900 p-8 ${pathname === '/nuevo-usuario' && 'flex justify-center items-start'}`}>
                         {auth?.id ? <Outlet /> : <Navigate to="/" />}
                     </div>
                 </main>
