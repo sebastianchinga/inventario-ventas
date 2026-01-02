@@ -255,7 +255,7 @@ const Inventario = () => {
                 <div className="bg-gray-800 rounded-lg border border-gray-700 w-full max-w-md mx-4 shadow-xl">
                     {/* Modal Header */}
                     <div className="p-6 border-b border-gray-700 flex items-center justify-between">
-                        <h3 className="text-2xl font-bold">Agregar Nuevo Producto</h3>
+                        <h3 className="text-2xl font-bold">{producto.id ? 'Actualizar Producto': 'Agregar Nuevo Producto'}</h3>
                         {/* Close Button */}
                         <button onClick={() => {
                             cerrarModal(),
@@ -360,7 +360,7 @@ const Inventario = () => {
                                 Cancelar
                             </button>
                             <button className="w-full flex-1 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-                                Agregar Producto
+                                {producto.id ? 'Actualizar Producto': 'Agregar Producto'}
                             </button>
                         </div>
                     </form>
