@@ -11,13 +11,14 @@ const authMiddleware = async (req, res, next) => {
             const { id } = await jwt.verify(token, process.env.PALABRA_SECRETA);
             req.usuario = await Usuario.findByPk(id, {
                 include: {
-                    model: Rol
+                    model: Rol,
+                    required: true
                 },
                 attributes: {
-                    exclude: ['password', 'token', 'confirmado', 'rol_id']
+                    exclude: ['password', 'token', 'confirmado']
                 }
             });
-            next();
+            return next();
         } catch (error) {
             return res.status(400).json({ msg: 'Hubo un error con el token' });
         }

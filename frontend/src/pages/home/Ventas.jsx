@@ -1,6 +1,29 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import clienteAxios from "../../config/axios";
+import convertirMoneda from "../../helpers/formatearMoneda";
+import formatearFecha from "../../helpers/formatearFecha";
 
 const Ventas = () => {
+
+  const [ventas, setVentas] = useState([]);
+
+  useEffect(() => {
+    const obtenerVentas = async () => {
+
+      try {
+        const url = '/ventas';
+        const { data } = await clienteAxios.get(url);
+        setVentas(data);
+        console.log(data);
+        
+      } catch (error) {
+        setVentas([]);
+      }
+    }
+
+    obtenerVentas()
+  }, [])
 
   return (
     <>
@@ -96,113 +119,31 @@ const Ventas = () => {
             </thead>
             <tbody className="divide-y divide-gray-700">
               {/* Sales data rows with eye icon */}
-              <tr className="hover:bg-gray-700/50 transition">
-                <td className="px-6 py-4 text-sm font-semibold">
-                  Carlos Rodríguez
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-300">24 Dic 2025</td>
-                <td className="px-6 py-4 text-sm font-bold">$1,299.99</td>
-                <td className="px-6 py-4 text-sm">
-                  <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-700/50 transition">
-                <td className="px-6 py-4 text-sm font-semibold">María García</td>
-                <td className="px-6 py-4 text-sm text-gray-300">23 Dic 2025</td>
-                <td className="px-6 py-4 text-sm font-bold">$2,150.50</td>
-                <td className="px-6 py-4 text-sm">
-                  <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-700/50 transition">
-                <td className="px-6 py-4 text-sm font-semibold">Juan López</td>
-                <td className="px-6 py-4 text-sm text-gray-300">22 Dic 2025</td>
-                <td className="px-6 py-4 text-sm font-bold">$875.00</td>
-                <td className="px-6 py-4 text-sm">
-                  <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-700/50 transition">
-                <td className="px-6 py-4 text-sm font-semibold">Ana Martínez</td>
-                <td className="px-6 py-4 text-sm text-gray-300">21 Dic 2025</td>
-                <td className="px-6 py-4 text-sm font-bold">$3,420.75</td>
-                <td className="px-6 py-4 text-sm">
-                  <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-700/50 transition">
-                <td className="px-6 py-4 text-sm font-semibold">Pedro Sánchez</td>
-                <td className="px-6 py-4 text-sm text-gray-300">20 Dic 2025</td>
-                <td className="px-6 py-4 text-sm font-bold">$945.25</td>
-                <td className="px-6 py-4 text-sm">
-                  <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
+              {ventas.map(venta => (
+                <tr key={venta.id} className="hover:bg-gray-700/50 transition">
+                  <td className="px-6 py-4 text-sm font-semibold">
+                    {venta.cliente}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-300">{formatearFecha(venta.fecha)}</td>
+                  <td className="px-6 py-4 text-sm font-bold">{convertirMoneda(venta.total)}</td>
+                  <td className="px-6 py-4 text-sm">
+                    <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

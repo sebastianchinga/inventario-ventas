@@ -7,12 +7,12 @@ const Venta = db.define('ventas', {
         allowNull: false
     },
     fecha: {
-        type: DataTypes.DATE,
-        defaultValue: Date.now()
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
     },
     hora: {
-        type: DataTypes.DATE,
-        defaultValue: Date.now()
+        type: DataTypes.TIME,
+        defaultValue: DataTypes.NOW
     },
     total: {
         type: DataTypes.DECIMAL

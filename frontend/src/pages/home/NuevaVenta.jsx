@@ -38,6 +38,7 @@ const NuevaVenta = () => {
         }
       }
       const { data } = await clienteAxios.post(url, { cliente, total, carrito }, config);
+      navigate('/ventas');
       
     } catch (error) {
 

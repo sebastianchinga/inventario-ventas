@@ -1,3 +1,4 @@
+import Producto from "../models/Producto.js";
 import ProductoVenta from "../models/ProductoVenta.js";
 import Venta from "../models/Venta.js"
 
@@ -8,25 +9,31 @@ export const listar = async (req, res) => {
 
 export const crear = async (req, res) => {
     const { cliente, fecha, hora, total, carrito } = req.body;
-    const { productos } = req.body;
-    const {usuario} = req;    
+    const { usuario } = req;
 
-    const nuevaVenta = new Venta({ cliente, fecha, hora, total, usuario_id: usuario.id });
     try {
+        const nuevaVenta = new Venta({ cliente, fecha, hora, total, usuario_id: usuario.id });
         const idVenta = await nuevaVenta.save();
-        for (let index = 0; index < carrito.length; index++) {
-            const element = carrito[index];
+        for (const producto of carrito) {
+            // Creando detalle de venta por cada producto del carrito
             const detalleVenta = new ProductoVenta({
                 venta_id: idVenta.id,
-                producto_id: element.id,
-                precio_unitario: element.precio,
-                cantidad: element.cantidad
+                producto_id: producto.id,
+                precio_unitario: producto.precio,
+                cantidad: producto.cantidad
             });
-            await detalleVenta.save();
+            // Guardo un detalle por cada producto
+            const resultado = await detalleVenta.save();
+            // Actualizo el stock por cada producto
+            const product = await Producto.findOne({where: {id: producto.id}});
+            product.stock = product.stock - resultado.cantidad;
+            await product.save()
+            
+
         }
-        res.json({msg: 'Venta realizada'})
+        res.json({ msg: 'Venta realizada' })
 
     } catch (error) {
-
+        res.status(400).json({ msg: error })
     }
 }
