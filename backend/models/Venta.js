@@ -2,11 +2,17 @@ import { DataTypes } from "sequelize";
 import db from "../config/db.js";
 
 const Venta = db.define('ventas', {
+    cliente: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     fecha: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        defaultValue: Date.now()
     },
     hora: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        defaultValue: Date.now()
     },
     total: {
         type: DataTypes.DECIMAL
