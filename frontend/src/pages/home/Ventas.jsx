@@ -3,20 +3,29 @@ import { Link } from "react-router-dom"
 import clienteAxios from "../../config/axios";
 import convertirMoneda from "../../helpers/formatearMoneda";
 import formatearFecha from "../../helpers/formatearFecha";
+import useModal from "../../hooks/useModal";
 
 const Ventas = () => {
 
   const [ventas, setVentas] = useState([]);
+  const { modal, abrirModal, cerrarModal } = useModal();
+  const [venta, setVenta] = useState({});
 
   useEffect(() => {
     const obtenerVentas = async () => {
 
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+
       try {
         const url = '/ventas';
-        const { data } = await clienteAxios.get(url);
+        const { data } = await clienteAxios.get(url, config);
         setVentas(data);
-        console.log(data);
-        
       } catch (error) {
         setVentas([]);
       }
@@ -24,6 +33,24 @@ const Ventas = () => {
 
     obtenerVentas()
   }, [])
+
+  const verDetalles = async (venta) => {
+    const { id } = venta
+    abrirModal();
+
+    try {
+      const { data } = await clienteAxios.get(`/ventas/${id}`);
+      setVenta(data);
+    } catch (error) {
+      setVenta({})
+    }
+
+  }
+
+  const resetarDetalles = () => {
+    cerrarModal();
+    setVenta({});
+  }
 
   return (
     <>
@@ -127,7 +154,7 @@ const Ventas = () => {
                   <td className="px-6 py-4 text-sm text-gray-300">{formatearFecha(venta.fecha)}</td>
                   <td className="px-6 py-4 text-sm font-bold">{convertirMoneda(venta.total)}</td>
                   <td className="px-6 py-4 text-sm">
-                    <button className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
+                    <button onClick={() => verDetalles(venta)} className="text-blue-400 hover:text-blue-300 transition inline-flex items-center">
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -148,6 +175,109 @@ const Ventas = () => {
           </table>
         </div>
       </div>
+      <div id="saleDetailsModal" className={`fixed inset-0 z-50 overflow-y-auto ${!modal && 'hidden'}`}>
+        {/* Overlay */}
+        <div className="fixed inset-0 bg-black/75 transition-opacity" />
+        <div className="flex items-center justify-center min-h-screen p-4">
+          <div className="relative bg-gray-800 rounded-xl shadow-2xl border border-gray-700 w-full max-w-2xl overflow-hidden">
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-gray-700 flex items-center justify-between bg-gray-700 bg-opacity-30">
+              <h3 className="text-xl font-bold text-white">Detalles de la Venta</h3>
+              <button
+                onClick={resetarDetalles}
+                className="text-gray-400 hover:text-white transition"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* Modal Body */}
+            <div className="p-6 space-y-6">
+              {/* Informacion General */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                    Cliente
+                  </p>
+                  <p className="text-lg font-medium">{venta.cliente}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                    Vendedor
+                  </p>
+                  <p className="text-lg font-medium text-blue-400">{venta?.id && venta.usuario.nombre}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                    Fecha
+                  </p>
+                  <p className="text-gray-200">{venta?.id && formatearFecha(venta.fecha)}</p>
+                </div>
+              </div>
+              {/* Tabla de Productos */}
+              <div>
+                <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">
+                  Productos
+                </p>
+                <div className="bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700 overflow-hidden">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-700 text-gray-300">
+                      <tr>
+                        <th className="px-4 py-2">Producto</th>
+                        <th className="px-4 py-2 text-center">Cant.</th>
+                        <th className="px-4 py-2 text-right">Precio</th>
+                        <th className="px-4 py-2 text-right">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
+                      {venta?.id && (
+                        venta.productos.map(producto => (
+                          <tr key={producto.id}>
+                            <td className="px-4 py-3">{producto.nombre}</td>
+                            <td className="px-4 py-3 text-center">{producto.productos_ventas.cantidad}</td>
+                            <td className="px-4 py-3 text-right">{convertirMoneda(producto.precio)}</td>
+                            <td className="px-4 py-3 text-right font-semibold">
+                              {convertirMoneda(producto.productos_ventas.cantidad * producto.precio)}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* Total */}
+              <div className="flex justify-end pt-4 border-t border-gray-700">
+                <div className="text-right">
+                  <p className="text-gray-400 text-sm">Total a Pagar</p>
+                  <p className="text-3xl font-bold text-green-400">{convertirMoneda(venta.total)}</p>
+                </div>
+              </div>
+            </div>
+            {/* Modal Footer */}
+            <div className="px-6 py-4 bg-gray-700 bg-opacity-30 flex justify-end">
+              <button
+                onClick={resetarDetalles}
+                className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition font-semibold text-sm"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
 
   )

@@ -1,9 +1,11 @@
 import Producto from "../models/Producto.js";
 import ProductoVenta from "../models/ProductoVenta.js";
+import Usuario from "../models/Usuario.js";
 import Venta from "../models/Venta.js"
 
 export const listar = async (req, res) => {
-    const ventas = await Venta.findAll();
+    const { usuario } = req
+    const ventas = await Venta.findAll({ where: { usuario_id: usuario.id } });
     res.json(ventas);
 }
 
@@ -25,10 +27,10 @@ export const crear = async (req, res) => {
             // Guardo un detalle por cada producto
             const resultado = await detalleVenta.save();
             // Actualizo el stock por cada producto
-            const product = await Producto.findOne({where: {id: producto.id}});
+            const product = await Producto.findOne({ where: { id: producto.id } });
             product.stock = product.stock - resultado.cantidad;
             await product.save()
-            
+
 
         }
         res.json({ msg: 'Venta realizada' })
@@ -36,4 +38,24 @@ export const crear = async (req, res) => {
     } catch (error) {
         res.status(400).json({ msg: error })
     }
+}
+
+export const detalles = async (req, res) => {
+    const { id } = req.params;
+    
+    const venta = await Venta.findByPk(id, {
+        attributes: {
+            exclude: ['usuario_id']
+        },
+        include: [
+            { model: Producto },
+            {model: Usuario}
+        ]
+    });
+
+    if (!venta) {
+        return res.status(400).json({ msg: 'Esta venta no existe' })
+    }
+
+    res.json(venta)
 }

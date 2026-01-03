@@ -49,25 +49,6 @@ const Aside = () => {
                     </Link>
                 )}
 
-                <Link to='/reportes' className={`flex items-center px-4 py-3 rounded-lg ${pathname === '/reportes' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-300 hover:bg-gray-700 transition'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                        <path
-                            fillRule="evenodd"
-                            d="M4 5a2 2 0 012-2 1 1 0 000-2H3a1 1 0 00-1 1v14a1 1 0 001 1h14a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 000 2 2 2 0 012 2v2h1v9H3V7h1V5z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                    <span>Reportes</span>
-                </Link>
-
-                <Link to='/configuracion' className={`flex items-center px-4 py-3 rounded-lg ${pathname === '/configuracion' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-300 hover:bg-gray-700 transition'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10.5 1.5H19a1 1 0 011 1v3a1 1 0 11-2 0V4H10.5a1 1 0 110-2zM4.3 4H1a1 1 0 00-1 1v3a1 1 0 112 0V6h3.3a1 1 0 110-2zm5.4 9H1a1 1 0 110 2h8.7a1 1 0 110-2zm8.3-1a1 1 0 011 1v3a1 1 0 11-2 0v-2H9.5a1 1 0 110-2H16z"></path>
-                    </svg>
-                    <span>Configuración</span>
-                </Link>
-
 
             </nav>
             {/* Footer */}
