@@ -246,9 +246,9 @@ const Ventas = () => {
                           <tr key={producto.id}>
                             <td className="px-4 py-3">{producto.nombre}</td>
                             <td className="px-4 py-3 text-center">{producto.productos_ventas.cantidad}</td>
-                            <td className="px-4 py-3 text-right">{convertirMoneda(producto.precio)}</td>
+                            <td className="px-4 py-3 text-right">{convertirMoneda(producto.productos_ventas.precio_unitario)}</td>
                             <td className="px-4 py-3 text-right font-semibold">
-                              {convertirMoneda(producto.productos_ventas.cantidad * producto.precio)}
+                              {convertirMoneda(producto.productos_ventas.cantidad * producto.productos_ventas.precio_unitario)}
                             </td>
                           </tr>
                         ))

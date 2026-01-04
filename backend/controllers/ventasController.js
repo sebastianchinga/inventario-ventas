@@ -48,7 +48,13 @@ export const detalles = async (req, res) => {
             exclude: ['usuario_id']
         },
         include: [
-            { model: Producto },
+            { 
+                model: Producto, 
+                attributes: ['id', 'nombre'],
+                through: {
+                    attributes: ['precio_unitario', 'cantidad']
+                } 
+            },
             {model: Usuario}
         ]
     });
