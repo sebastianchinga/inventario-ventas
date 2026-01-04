@@ -1,3 +1,4 @@
+import enviarEmail from "../helpers/enviarEmail.js";
 import generarJWT from "../helpers/generarJWT.js";
 import Rol from "../models/Rol.js";
 import Usuario from "../models/Usuario.js";
@@ -53,8 +54,10 @@ export const registro = async (req, res) => {
     }
 
     const usuario = new Usuario(req.body);
+    
     try {
         await usuario.save();
+        await enviarEmail(usuario)
         res.json({ msg: 'Te hemos enviado un código a tu e-mail' });
     } catch (error) {
         res.status(400).json({ msg: error });
